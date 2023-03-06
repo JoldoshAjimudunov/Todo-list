@@ -1,0 +1,19 @@
+{
+  "posts": [
+    {
+      "id": 8,
+      "title": "updated post",
+      "author": "typicode"
+    },
+    {
+      "title": "123",
+      "body": "123",
+      "id": 12
+    },
+    {
+      "title": "hi",
+      "body": "hi",
+      "id": 13
+    }
+  ]
+}
