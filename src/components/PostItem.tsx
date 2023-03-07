@@ -1,7 +1,7 @@
 import { Box, Card, Container, Modal, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
-import React, { FC } from "react";
+import React, { FC, useState } from "react";
 import { IPost } from "../models/IPost";
 import "../style/post.css";
 
@@ -29,13 +29,23 @@ const PostItem: FC<PostItemProps> = ({ post, remove, update }) => {
     remove(post);
   };
   const handleUpdate = (event: React.MouseEvent) => {
-    const title = prompt() || "";
+    // const title = prompt() || "";
+    const title = edit || "";
+
     update({ ...post, title });
+    setOpen(false);
   };
+
+  // function handleEditInput(e) {
+  //   let newObj = edit
+  //   newObj.edit = e.target.value;
+  //   setEdit(newObj);
+  // }
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const [edit, setEdit] = useState<string>("");
 
   return (
     <div className="post">
@@ -72,7 +82,11 @@ const PostItem: FC<PostItemProps> = ({ post, remove, update }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <input type="text" />
+          <input
+            type="text"
+            value={edit}
+            onChange={(e) => setEdit(e.target.value)}
+          />
           <Button onClick={handleUpdate}>edit</Button>
         </Box>
       </Modal>

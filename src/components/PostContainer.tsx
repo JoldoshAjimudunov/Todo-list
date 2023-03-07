@@ -5,18 +5,19 @@ import { postAPI } from "../services/PostService";
 import PostItem from "./PostItem";
 import "../style/post.css";
 
-interface IState {
-  list: {
-    task: string;
-  };
-}
+// interface IState {
+//   list: {
+//     task: string;
+//   };
+// }
 
 const PostContainer: React.FC = () => {
-  const [state, setState] = useState<IState>({
-    list: {
-      task: "",
-    },
-  });
+  // const [task, setTask] = useState<IState>({
+  //   list: {
+  //     task: "",
+  //   },
+  // });
+  const [task, setTask] = useState<string>("");
   const [limit, setLimit] = useState(100);
   const {
     data: posts,
@@ -28,9 +29,10 @@ const PostContainer: React.FC = () => {
   const [deletePost, {}] = postAPI.useDeletePostMutation();
 
   const handleCreate = async () => {
-    let title = JSON.stringify(state.list);
-    title = title.replace(/[{},""]/g, "");
+    let title = JSON.stringify(task);
+    title = title.replace(/[""]/g, "");
     await createPost({ title, body: title } as any);
+    setTask("");
   };
 
   const handleRemove = (post: IPost) => {
@@ -43,12 +45,13 @@ const PostContainer: React.FC = () => {
   ///////////////
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setState({
-      list: {
-        ...state.list,
-        [event.target.name]: event.target.value,
-      },
-    });
+    // setTask({
+    //   list: {
+    //     ...task.list,
+    //     [event.target.name]: event.target.value,
+    //   },
+    // });
+    setTask(event.target.value);
   };
 
   ///////////////
@@ -58,7 +61,7 @@ const PostContainer: React.FC = () => {
         <div>
           <input
             type="text"
-            value={state.list.task}
+            value={task}
             onChange={handleChange}
             name="task"
             style={{ height: "28px", width: "300px" }}
