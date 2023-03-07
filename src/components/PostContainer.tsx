@@ -7,14 +7,14 @@ import "../style/post.css";
 
 interface IState {
   list: {
-    todoitem: string;
+    task: string;
   };
 }
 
 const PostContainer: React.FC = () => {
   const [state, setState] = useState<IState>({
     list: {
-      todoitem: "",
+      task: "",
     },
   });
   const [limit, setLimit] = useState(100);
@@ -28,7 +28,8 @@ const PostContainer: React.FC = () => {
   const [deletePost, {}] = postAPI.useDeletePostMutation();
 
   const handleCreate = async () => {
-    const title = JSON.stringify(state.list);
+    let title = JSON.stringify(state.list);
+    title = title.replace(/[{},""]/g, "");
     await createPost({ title, body: title } as any);
   };
 
@@ -54,15 +55,18 @@ const PostContainer: React.FC = () => {
   return (
     <div>
       <div className="post__list">
-        <input
-          type="text"
-          value={state.list.todoitem}
-          onChange={handleChange}
-          name="todoitem"
-        />
-        <Button variant="outlined" onClick={handleCreate}>
-          add post
-        </Button>
+        <div>
+          <input
+            type="text"
+            value={state.list.task}
+            onChange={handleChange}
+            name="task"
+            style={{ height: "28px", width: "300px" }}
+          />
+          <Button variant="outlined" onClick={handleCreate}>
+            add post
+          </Button>
+        </div>
         {isLoading && <h1>loading in proccess</h1>}
         {error && <h1>error</h1>}
         {posts &&

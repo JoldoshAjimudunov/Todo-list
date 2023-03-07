@@ -1,4 +1,4 @@
-import { Card, Container } from "@mui/material";
+import { Box, Card, Container, Modal, Typography } from "@mui/material";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import React, { FC } from "react";
@@ -11,6 +11,18 @@ interface PostItemProps {
   update: (post: IPost) => void;
 }
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const PostItem: FC<PostItemProps> = ({ post, remove, update }) => {
   const handleRemove = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -20,6 +32,11 @@ const PostItem: FC<PostItemProps> = ({ post, remove, update }) => {
     const title = prompt() || "";
     update({ ...post, title });
   };
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <div className="post">
       <Card sx={{ width: 505, m: 2 }}>
@@ -34,7 +51,7 @@ const PostItem: FC<PostItemProps> = ({ post, remove, update }) => {
             <Button
               sx={{ width: "20px", height: "30px", fontSize: "12px" }}
               variant="contained"
-              onClick={handleUpdate}
+              onClick={handleOpen}
             >
               edit
             </Button>
@@ -48,6 +65,17 @@ const PostItem: FC<PostItemProps> = ({ post, remove, update }) => {
           </div>
         </Stack>
       </Card>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          <input type="text" />
+          <Button onClick={handleUpdate}>edit</Button>
+        </Box>
+      </Modal>
     </div>
   );
 };
