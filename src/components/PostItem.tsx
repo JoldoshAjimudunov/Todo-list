@@ -1,5 +1,12 @@
 import { styled } from "@mui/material/styles";
-import { Box, Card, Container, Modal, Typography } from "@mui/material";
+import {
+  Box,
+  Card,
+  Checkbox,
+  Container,
+  Modal,
+  Typography,
+} from "@mui/material";
 import Button from "@mui/material/Button";
 import { purple, red } from "@mui/material/colors";
 import Stack from "@mui/material/Stack";
@@ -23,14 +30,16 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
+  display: "flex",
+  justifyContent: "center",
 };
-const ColorButton = styled(Button)(({ theme }) => ({
-  color: theme.palette.getContrastText(purple[500]),
-  backgroundColor: purple[500],
-  "&:hover": {
-    backgroundColor: purple[700],
-  },
-}));
+// const ColorButton = styled(Button)(({ theme }) => ({
+//   color: theme.palette.getContrastText(purple[500]),
+//   backgroundColor: purple[500],
+//   "&:hover": {
+//     backgroundColor: purple[700],
+//   },
+// }));
 
 const PostItem: FC<PostItemProps> = ({ post, remove, update }) => {
   const handleRemove = (event: React.MouseEvent) => {
@@ -45,20 +54,11 @@ const PostItem: FC<PostItemProps> = ({ post, remove, update }) => {
     setOpen(false);
   };
 
-  // function handleEditInput(e) {
-  //   let newObj = edit
-  //   newObj.edit = e.target.value;
-  //   setEdit(newObj);
-  // }
-
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [edit, setEdit] = useState<string>("");
 
-  // const handleDone = (id: number) => {
-  //   post(post)
-  // }
   const [done, setDone] = useState<boolean>(true);
 
   const handleDone = (event: React.MouseEvent) => {
@@ -86,13 +86,13 @@ const PostItem: FC<PostItemProps> = ({ post, remove, update }) => {
           spacing={2}
         >
           <div style={{ display: "flex" }}>
-            <input type="checkbox" onClick={() => setDone(!done)} />
+            {/* <input type="checkbox" onClick={() => setDone(!done)} /> */}
+            <Checkbox onClick={() => setDone(!done)} />
             {done ? (
-              <div>{post.title}</div>
+              <div className="post__title">{post.title}</div>
             ) : (
-              <div style={{ textDecoration: "line-through" }}>{post.title}</div>
+              <div className="post__title__done">{post.title}</div>
             )}
-            {/* {post.title} */}
           </div>
           <div>
             <Button
@@ -125,6 +125,7 @@ const PostItem: FC<PostItemProps> = ({ post, remove, update }) => {
       >
         <Box sx={style}>
           <input
+            style={{ width: "200px" }}
             type="text"
             value={edit}
             onChange={(e) => setEdit(e.target.value)}

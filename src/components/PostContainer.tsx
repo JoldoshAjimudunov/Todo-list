@@ -4,19 +4,10 @@ import { IPost } from "../models/IPost";
 import { postAPI } from "../services/PostService";
 import PostItem from "./PostItem";
 import "../style/post.css";
-
-// interface IState {
-//   list: {
-//     task: string;
-//   };
-// }
+import { green } from "@mui/material/colors";
+import { styled } from "@mui/material/styles";
 
 const PostContainer: React.FC = () => {
-  // const [task, setTask] = useState<IState>({
-  //   list: {
-  //     task: "",
-  //   },
-  // });
   const [task, setTask] = useState<string>("");
   const [limit, setLimit] = useState(100);
   const {
@@ -29,10 +20,14 @@ const PostContainer: React.FC = () => {
   const [deletePost, {}] = postAPI.useDeletePostMutation();
 
   const handleCreate = async () => {
-    let title = JSON.stringify(task);
-    title = title.replace(/[""]/g, "");
-    await createPost({ title, body: title } as any);
-    setTask("");
+    if (task.length > 0) {
+      let title = JSON.stringify(task);
+      title = title.replace(/[""]/g, "");
+      await createPost({ title, body: title } as any);
+      setTask("");
+    } else {
+      console.log("input empty");
+    }
   };
 
   const handleRemove = (post: IPost) => {
@@ -45,30 +40,39 @@ const PostContainer: React.FC = () => {
   ///////////////
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    // setTask({
-    //   list: {
-    //     ...task.list,
-    //     [event.target.name]: event.target.value,
-    //   },
-    // });
     setTask(event.target.value);
   };
+
+  const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(green[500]),
+    backgroundColor: green[800],
+    "&:hover": {
+      backgroundColor: green[900],
+    },
+  }));
 
   ///////////////
   return (
     <div>
       <div className="post__list">
-        <div>
+        <div className="post__add">
           <input
             type="text"
             value={task}
             onChange={handleChange}
             name="task"
-            style={{ height: "28px", width: "300px" }}
+            className="post__inp"
+            placeholder={task.length < 1 ? "type" : ""}
           />
-          <Button variant="outlined" onClick={handleCreate}>
+          <ColorButton
+            sx={{
+              color: "white",
+            }}
+            variant="outlined"
+            onClick={handleCreate}
+          >
             add post
-          </Button>
+          </ColorButton>
         </div>
         {isLoading && <h1>loading in proccess</h1>}
         {error && <h1>error</h1>}
